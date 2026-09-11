@@ -1,0 +1,35 @@
+# Copy this workflow setup into a repository to add DocMeThis Check.
+# It reports findings only; it never applies Fix patches.
+name: Documentation consistency
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docstrings:
+    runs-on: ubuntu-latest
+    steps:
+      # Keep the project's history so Check can compare the submitted version
+      # with the previous version.
+      - name: Check out the repository and its history
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check documentation consistency
+        uses: DocMeThis/docmethis-check@80f6ea6bdb68bd246b075b265a4ef60e77b6e5b0 # pinned public Check release
+        env:
+          GITHUB_BEFORE_SHA: ${{ github.event.before }}
+        with:
+          project-path: .
+          check-mode: regression
+          fail-on-warning: true
+          annotation-placement: precise
+          on-nonlinear-push-without-base: warn
