@@ -1,0 +1,7 @@
+[tool.docmethis.fix]
+api-profile = "provider"
+policy-profile = "default"
+api-config-file = ".github/docmethis-fix/llm_api.toml"
+policy-config-file = ".github/docmethis-fix/llm_policies.toml"
+docstring-language = "en"
+scope = "impacted"
